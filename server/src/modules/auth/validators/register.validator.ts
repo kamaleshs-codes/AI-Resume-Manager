@@ -10,5 +10,9 @@ export const registerSchema = z.object({
   password: z
     .string()
     .trim()
-    .min(6, "Password must be atleast 6 characters long."),
+    .min(6, "Password must be at least 6 characters long.")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/,
+      "Password must contain at least one uppercase, one lowercase, one number and one special character.",
+    ),
 });
