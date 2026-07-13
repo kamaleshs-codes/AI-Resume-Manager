@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { RegisterRequestbody } from "../interfaces/auth.interface.js";
 import { registerUserService } from "../services/auth.service.js";
 
 export const registerUser = async (
   req: Request<{}, {}, RegisterRequestbody>,
   res: Response,
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const result = await registerUserService(req.body);
@@ -15,10 +16,6 @@ export const registerUser = async (
     });
     return;
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error instanceof Error ? error.message : "Internal Server Error",
-    });
-    return;
+    next(error);
   }
 };
