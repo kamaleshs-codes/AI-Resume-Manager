@@ -16,3 +16,5 @@ export const registerSchema = z.object({
       "Password must contain at least one uppercase, one lowercase, one number and one special character.",
     ),
 });
+
+export type RegisterRequestBody = z.infer<typeof registerSchema>;

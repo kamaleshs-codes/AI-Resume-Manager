@@ -1,9 +1,10 @@
 import bcrypt from "bcryptjs";
 import User from "../../user/models/User.js";
-import { RegisterRequestbody } from "../interfaces/auth.interface.js";
+import { RegisterRequestBody } from "../validators/register.validator.js";
 import { AppError } from "../../../utils/AppError.js";
+import { LoginRequestBody } from "../validators/login.validator.js";
 
-export const registerUserService = async (data: RegisterRequestbody) => {
+export const registerUserService = async (data: RegisterRequestBody) => {
   const { username, email, password } = data;
 
   const existingUser = await User.findOne({
@@ -11,10 +12,10 @@ export const registerUserService = async (data: RegisterRequestbody) => {
   });
   if (existingUser) {
     if (existingUser.email === email) {
-      throw new AppError(409,"Email already Registered");
+      throw new AppError(409, "Email already Registered");
     }
     if (existingUser.username === username) {
-      throw new AppError(409,"Username already exists");
+      throw new AppError(409, "Username already exists");
     }
   }
 
@@ -29,5 +30,22 @@ export const registerUserService = async (data: RegisterRequestbody) => {
     id: newUser._id,
     username: newUser.username,
     email: newUser.email,
+  };
+};
+
+export const loginUserService = async (data: LoginRequestBody) => {
+  const { email, password } = data;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new AppError(401, "Invalid Email or Password");
+  }
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new AppError(401, "Invalid Email or Password");
+  }
+  return {
+    id: user._id,
+    username: user.username,
+    email: user.email,
   };
 };
