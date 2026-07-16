@@ -5,7 +5,7 @@ import { AppError } from "../../../utils/AppError.js";
 import { LoginRequestBody } from "../validators/login.validator.js";
 import jwt from "jsonwebtoken";
 import { env } from "../../../config/env.js";
-import { AuthPayload } from "../types/auth-payload.js";
+import { AuthenticatedUser } from "../interfaces/authenticated-user.interface.ts.js";
 
 export const registerUserService = async (data: RegisterRequestBody) => {
   const { username, email, password } = data;
@@ -46,17 +46,13 @@ export const loginUserService = async (data: LoginRequestBody) => {
   if (!isPasswordValid) {
     throw new AppError(401, "Invalid Email or Password");
   }
-  const payload: AuthPayload = {
+  const payload: AuthenticatedUser = {
     id: user._id.toString(),
-    email: user.email
-  }
-  const token = jwt.sign(
-    payload,
-    env.JWT_SECRET,
-    {
-      expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
-    },
-  );
+    email: user.email,
+  };
+  const token = jwt.sign(payload, env.JWT_SECRET, {
+    expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
+  });
   return {
     token,
     user: {
@@ -64,5 +60,19 @@ export const loginUserService = async (data: LoginRequestBody) => {
       username: user.username,
       email: user.email,
     },
+  };
+};
+
+export const getCurrentUserService = async (
+  authenticatedUser: AuthenticatedUser,
+) => {
+  const user = await User.findById(authenticatedUser.id);
+  if (!user) {
+    throw new AppError(404, "User not found.");
+  }
+  return {
+    id: user._id,
+    username: user.username,
+    email: user.email,
   };
 };

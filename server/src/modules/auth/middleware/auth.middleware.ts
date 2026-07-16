@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { AppError } from "../../../utils/AppError.js";
 import jwt from "jsonwebtoken";
 import { env } from "../../../config/env.js";
-import { AuthPayload } from "../types/auth-payload.js";
-
+import { AuthenticatedUser } from "../interfaces/authenticated-user.interface.ts.js";
 
 export const authenticate = (
   req: Request,
@@ -18,8 +17,7 @@ export const authenticate = (
   if (bearer !== "Bearer" || !token) {
     throw new AppError(401, "Invalid authorization header");
   }
-  const decoded = jwt.verify(
-    token,
-    env.JWT_SECRET
-  ) as AuthPayload
+  const authenticatedUser = jwt.verify(token, env.JWT_SECRET) as AuthenticatedUser;
+  req.user = authenticatedUser;
+  next();
 };
