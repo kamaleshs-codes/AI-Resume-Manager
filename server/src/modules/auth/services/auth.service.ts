@@ -5,6 +5,7 @@ import { AppError } from "../../../utils/AppError.js";
 import { LoginRequestBody } from "../validators/login.validator.js";
 import jwt from "jsonwebtoken";
 import { env } from "../../../config/env.js";
+import { AuthPayload } from "../types/auth-payload.js";
 
 export const registerUserService = async (data: RegisterRequestBody) => {
   const { username, email, password } = data;
@@ -45,11 +46,12 @@ export const loginUserService = async (data: LoginRequestBody) => {
   if (!isPasswordValid) {
     throw new AppError(401, "Invalid Email or Password");
   }
+  const payload: AuthPayload = {
+    id: user._id.toString(),
+    email: user.email
+  }
   const token = jwt.sign(
-    {
-      id: user._id,
-      email: user.email,
-    },
+    payload,
     env.JWT_SECRET,
     {
       expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
