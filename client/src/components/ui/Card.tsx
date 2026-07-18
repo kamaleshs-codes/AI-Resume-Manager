@@ -8,9 +8,19 @@ const Card = ({ children, ...props }: CardProps) => {
   return (
     <div
       {...props}
-      className='w-full max-w-md rounded-2xl bg-canvas p-8 shadow-lg border border-gray-200'>
+      className='
+        w-full
+        max-w-md
+        rounded-2xl
+        bg-canvas
+        border
+        border-border
+        p-8
+        shadow-(--shadow-card)
+      '>
       {children}
     </div>
   );
 };
+
 export default Card;
