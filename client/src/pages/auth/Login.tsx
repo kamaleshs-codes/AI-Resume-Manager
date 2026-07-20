@@ -3,10 +3,14 @@ import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import FormField from "../../components/ui/FormFields";
 import { useState } from "react";
-import { login } from "../../api/auth/auth.api";
+import { login as loginApi } from "../../api/auth/auth.api";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/auth/useAuth";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,19 +18,38 @@ const Login = () => {
 
   const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
+    setSuccess("");
+
     try {
-      const response = await login({
+      const response = await loginApi({
         email,
         password,
       });
-      setSuccess(response.message);
+      login(response.data.token, response.data.user);
+      alert("Login Successful!");
+      navigate("/dashboard");
+      console.log(response);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setError(error.response?.data?.message ?? "Something went wrong");
+        console.log(error);
       } else {
         setError("Something went wrong");
       }
     }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setError("");
+    setSuccess("");
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setError("");
+    setSuccess("");
   };
 
   return (
@@ -64,7 +87,7 @@ const Login = () => {
                 type='email'
                 placeholder='Enter your email'
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
               />
             </FormField>
 
@@ -74,7 +97,7 @@ const Login = () => {
                 type='password'
                 placeholder='Enter your password'
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
               />
             </FormField>
             {success && (
