@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { RegisterRequestBody } from "../validators/register.validator.js";
-import { getCurrentUserService, registerUserService, loginUserService } from "../services/auth.service.js";
+import {
+  getCurrentUserService,
+  registerUserService,
+  loginUserService,
+} from "../services/auth.service.js";
 import { LoginRequestBody } from "../validators/login.validator.js";
 
 export const registerUser = async (

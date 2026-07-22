@@ -3,10 +3,10 @@ import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import FormField from "../../components/ui/FormFields";
 import { useState } from "react";
-import { login as loginApi } from "../../api/auth/auth.api";
+import { loginApi } from "../../api/auth.api";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/auth/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,10 +32,23 @@ const Login = () => {
       console.log(response);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        setError(error.response?.data?.message ?? "Something went wrong");
-        console.log(error);
+        const data = error.response?.data;
+
+        if (data?.errors?.length) {
+          // Show the first Zod validation error
+          setError(data.errors[0].message);
+        } else if (data?.message) {
+          // AppError or generic backend message
+          setError(data.message);
+        } else if (error.request) {
+          setError("Unable to connect to server. Please try again later");
+        } else {
+          setError("Something went wrong.");
+        }
+
+        console.error(error);
       } else {
-        setError("Something went wrong");
+        setError("Something went wrong.");
       }
     }
   };
