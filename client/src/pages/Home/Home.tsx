@@ -1,51 +1,115 @@
-import { useNavigate } from "react-router-dom";
-import Button from "../../components/ui/Button";
-import Card from "../../components/ui/Card";
-import { useAuth } from "../../hooks/useAuth";
+import { FaChartLine, FaFileAlt, FaFolderOpen, FaGlobe } from "react-icons/fa";
+
+import WelcomeBanner from "../../components/home/WelcomeBanner";
+import SectionTitle from "../../components/home/SectionTitle";
+import FeatureCard from "../../components/home/FeatureCard";
+import StatsCard from "../../components/home/StatsCard";
+import RecentActivity from "../../components/home/RecentActivity";
 
 const Home = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login", { replace: true });
-  };
+  const activities = [
+    {
+      id: 1,
+      title: "Resume Updated",
+      description: "Software Engineer Resume edited successfully.",
+      time: "2 hours ago",
+    },
+    {
+      id: 2,
+      title: "Portfolio Generated",
+      description: "Professional portfolio website generated.",
+      time: "Yesterday",
+    },
+    {
+      id: 3,
+      title: "ATS Analysis",
+      description: "Resume scored 86% ATS compatibility.",
+      time: "2 days ago",
+    },
+  ];
 
   return (
-    <main className='min-h-screen bg-background'>
-      {/* Navbar */}
-      <header className='border-b border-border bg-surface'>
-        <div className='mx-auto flex h-16 max-w-7xl items-center justify-between px-6'>
-          <h1 className='text-xl font-bold text-primary'>ResumePilot AI</h1>
+    <main className='mx-auto max-w-7xl px-6 py-8'>
+      {/* Welcome */}
+      <WelcomeBanner />
 
-          <div className='flex items-center gap-4'>
-            <div className='text-right'>
-              <p className='font-medium text-text'>{user?.username}</p>
+      {/* Quick Actions */}
+      <SectionTitle
+        title='Quick Actions'
+        description="Choose where you'd like to begin."
+      />
 
-              <p className='text-sm text-text-muted'>{user?.email}</p>
-            </div>
+      <div className='grid gap-6 md:grid-cols-2 xl:grid-cols-4'>
+        <FeatureCard
+          title='Resume Builder'
+          description='Create professional ATS-friendly resumes with AI assistance.'
+          icon={<FaFileAlt size={26} />}
+          buttonText='Open Builder'
+          onClick={() => {}}
+        />
 
-            <Button type='button' onClick={handleLogout}>
-              Logout
-            </Button>
-          </div>
+        <FeatureCard
+          title='Resume Analyzer'
+          description='Analyze your resume and improve ATS compatibility.'
+          icon={<FaChartLine size={26} />}
+          buttonText='Analyze Resume'
+          onClick={() => {}}
+        />
+
+        <FeatureCard
+          title='Portfolio Generator'
+          description='Generate a professional portfolio website from your resume.'
+          icon={<FaGlobe size={26} />}
+          buttonText='Generate Portfolio'
+          onClick={() => {}}
+        />
+
+        <FeatureCard
+          title='My Resumes'
+          description='Manage, edit and download all of your saved resumes.'
+          icon={<FaFolderOpen size={26} />}
+          buttonText='View Resumes'
+          onClick={() => {}}
+        />
+      </div>
+
+      {/* Statistics */}
+      <div className='mt-12'>
+        <SectionTitle
+          title='Statistics'
+          description='A quick overview of your ResumePilot AI activity.'
+        />
+
+        <div className='grid gap-6 md:grid-cols-3'>
+          <StatsCard
+            title='Resumes Created'
+            value={5}
+            icon={<FaFileAlt size={24} />}
+          />
+
+          <StatsCard
+            title='ATS Analyses'
+            value={8}
+            icon={<FaChartLine size={24} />}
+          />
+
+          <StatsCard
+            title='Portfolio Sites'
+            value={2}
+            icon={<FaGlobe size={24} />}
+          />
         </div>
-      </header>
+      </div>
 
-      {/* Dashboard Content */}
-      <section className='mx-auto max-w-7xl p-8'>
-        <Card>
-          <h2 className='text-3xl font-bold'>
-            Welcome back,
-            <span className='ml-2 text-primary'>{user?.username}</span>
-          </h2>
+      {/* Recent Activity */}
+      <div className='mt-12'>
+        <SectionTitle
+          title='Recent Activity'
+          description='Your latest activities in ResumePilot AI.'
+        />
 
-          <p className='mt-3 text-text-muted'>
-            Your ResumePilot AI dashboard is ready.
-          </p>
-        </Card>
-      </section>
+        <RecentActivity activities={activities} />
+      </div>
     </main>
   );
 };

@@ -1,0 +1,44 @@
+import Card from "../ui/Card";
+
+interface ActivityItem {
+  id: number;
+  title: string;
+  description: string;
+  time: string;
+}
+
+interface RecentActivityProps {
+  activities: ActivityItem[];
+}
+
+const RecentActivity = ({ activities }: RecentActivityProps) => {
+  return (
+    <Card>
+      <div className='space-y-5'>
+        {activities.length === 0 ? (
+          <p className='text-center text-text-muted'>
+            No recent activity available.
+          </p>
+        ) : (
+          activities.map((activity) => (
+            <div
+              key={activity.id}
+              className='border-b border-border pb-4 last:border-none last:pb-0'>
+              <h3 className='font-semibold text-text'>{activity.title}</h3>
+
+              <p className='mt-1 text-sm text-text-muted'>
+                {activity.description}
+              </p>
+
+              <span className='mt-2 block text-xs text-text-muted'>
+                {activity.time}
+              </span>
+            </div>
+          ))
+        )}
+      </div>
+    </Card>
+  );
+};
+
+export default RecentActivity;
