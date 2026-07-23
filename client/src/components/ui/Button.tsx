@@ -15,7 +15,7 @@ const Button = ({ children, ...props }: ButtonProps) => {
         px-4
         py-3
         font-semibold
-        text-white
+        text-text-btn
 
         shadow-(--shadow-button)
 

@@ -28,7 +28,7 @@ const Login = () => {
       });
       login(response.data.token, response.data.user);
       alert("Login Successful!");
-      navigate("/dashboard");
+      navigate("/home", { replace: true });
       console.log(response);
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -1,15 +1,20 @@
 import { Routes, Route } from "react-router-dom";
-
 import Login from "../pages/auth/Login";
-
-import Dashboard from "../pages/dashboard/dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import Home from "../pages/Home/Home";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path='/' element={<Login />} />
+      <Route
+        path='/'
+        element={
+          <PublicRoute>
+            <Home/>
+          </PublicRoute>
+        }
+      />
 
       <Route
         path='/login'
@@ -23,10 +28,10 @@ const AppRoutes = () => {
       {/* <Route path='/register' element={<Register />} /> */}
 
       <Route
-        path='/dashboard'
+        path='/home'
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Home />
           </ProtectedRoute>
         }
       />

@@ -12,6 +12,7 @@ import {
   clearAuth,
 } from "../utils/storage";
 import { getCurrentUserApi } from "../api/auth.api";
+import axios from "axios";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined,
@@ -33,7 +34,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         const currentUser = await getCurrentUserApi();
         setUser(currentUser);
       } catch (error) {
-        console.error(error);
+        console.log("Auth initialization failed:", error);
+        if (axios.isAxiosError(error)) {
+          console.log("Status:", error.response?.status);
+          console.log("Response", error.response?.data);
+        }
 
         clearAuth();
         setToken(null);

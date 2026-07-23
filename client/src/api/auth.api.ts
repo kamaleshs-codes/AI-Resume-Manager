@@ -1,5 +1,5 @@
 import api from "./axios";
-import type { LoginRequest, RegisterRequest, User } from '../types/auth.types';
+import type { LoginRequest, RegisterRequest, User } from "../types/auth.types";
 
 export const loginApi = async (data: LoginRequest) => {
   const response = await api.post("auth/login", data);
@@ -12,6 +12,6 @@ export const registerApi = async (data: RegisterRequest) => {
 };
 
 export const getCurrentUserApi = async (): Promise<User> => {
-  const response = await api.post("auth/me");
+  const response = await api.get("auth/me");
   return response.data.data;
 };

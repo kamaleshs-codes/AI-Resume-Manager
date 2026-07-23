@@ -20,7 +20,7 @@ const PublicRoute = ({ children }: PublicRouteProps) => {
 
   // Already logged in
   if (isAuthenticated) {
-    return <Navigate to='/dashboard' replace />;
+    return <Navigate to='/home' replace />;
   }
 
   // Not authenticated
