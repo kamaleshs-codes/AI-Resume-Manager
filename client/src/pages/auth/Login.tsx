@@ -86,7 +86,7 @@ const Login = () => {
         </section>
 
         {/* Login Card */}
-        <Card>
+        <Card className='mx-auto max-w-md'>
           <h2 className='text-center text-3xl font-bold'>Welcome Back</h2>
 
           <p className='mt-2 text-center text-text-muted'>

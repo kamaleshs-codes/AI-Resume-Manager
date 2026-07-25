@@ -3,39 +3,28 @@ import Login from "../pages/auth/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import Home from "../pages/Home/Home";
+import HomeLayout from "../layouts/HomeLayout";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route
-        path='/'
-        element={
-          <PublicRoute>
-            <Home/>
-          </PublicRoute>
-        }
-      />
+  {/* Public */}
+  <Route
+    path="/login"
+    element={
+      <PublicRoute>
+        <Login />
+      </PublicRoute>
+    }
+  />
 
-      <Route
-        path='/login'
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
-
-      {/* <Route path='/register' element={<Register />} /> */}
-
-      <Route
-        path='/home'
-        element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+  {/* Protected */}
+  <Route element={<ProtectedRoute />}>
+    <Route element={<HomeLayout />}>
+      <Route path="/home" element={<Home />} />
+    </Route>
+  </Route>
+</Routes>
   );
 };
 
