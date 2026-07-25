@@ -29,7 +29,7 @@ const Home = () => {
   ];
 
   return (
-    <main className='mx-auto max-w-7xl px-6 py-8'>
+    <>
       {/* Welcome */}
       <WelcomeBanner />
 
@@ -110,7 +110,7 @@ const Home = () => {
 
         <RecentActivity activities={activities} />
       </div>
-    </main>
+    </>
   );
 };
 
